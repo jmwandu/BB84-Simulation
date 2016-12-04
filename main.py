@@ -10,8 +10,10 @@ import os
 Alice = {'generatedBits':[], 'chosenBases':[]}
 Bob = {'measuredBits':[], 'chosenBases':[]}
 Eve = {'measuredBits':[], 'chosenBases':[]}
+correct_basis_indeces = []
 BITSIZE = 10
 
+#step 1 of protocol
 def step1():
     temp_bit_list = []
     temp_basis_list = []
@@ -28,7 +30,8 @@ def step1():
             
     Alice['generatedBits'] = temp_bit_list
     Alice['chosenBases'] = temp_basis_list
-    
+
+#step 2 and 3 of protocol
 def step2_3():
     temp_bit_list = []
     temp_basis_list = []
@@ -48,6 +51,12 @@ def step2_3():
             
     Bob['measuredBits'] = temp_bit_list
     Bob['chosenBases'] = temp_basis_list
+    
+#step 4 and 5 of protocol
+def step4_5():
+    for i in range(0, BITSIZE):
+        if (Alice['chosenBases'][i] == Bob['chosenBases'][i]):
+            correct_basis_indeces.append(i)
 
 #where all the magic happens
 def main():
@@ -70,11 +79,13 @@ def main():
         print Bob
         raw_input("Press enter to proceed to Step 4...")
         
-        '''
-        print "Step 4: Bob publicly tells Alice what basis he measure each quit in"
+        print "Step 4: Bob publicly tells Alice what basis he measured each qubit in"
         print "Step 5: Alice tells Bob for which qubits he chose the correct basis"
+        step4_5()
+        print correct_basis_indeces
         raw_input("Press enter to proceed to Step 6...")
         
+        '''
         print "Step 6: Alice and Bob delete all of their corresponding qubits for which the bases disagree"
         raw_input("Press enter to proceed to Step 7...")
         
