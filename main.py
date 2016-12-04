@@ -10,7 +10,7 @@ Alice = {'generatedBits':[], 'chosenBases':[], 'siftedBits':[], 'siftedBases':[]
 Bob = {'measuredBits':[], 'chosenBases':[], 'siftedBits':[], 'siftedBases':[]}
 Eve = {'measuredBits':[], 'chosenBases':[]}
 correct_basis_indeces = []
-BITSIZE = 10
+BITSIZE = 100000
 
 #step 1 of protocol
 def step1():
@@ -83,25 +83,27 @@ def main():
         
         print("Step 1: Alice prepares a random string of bits and encodes them randomly in either the X or Z bases")
         step1()
-        print(Alice)
+        #print(Alice)
         input("Press enter to proceed to Step 2...")
         
         print("Step 2: Alice sends each qubit to Bob")
         print("Step 3: Bob randomly measures each qubit in either X or Z bases and records his results")
         step2_3()
-        print(Bob)
+        #print(Bob)
         input("Press enter to proceed to Step 4...")
         
         print("Step 4: Bob publicly tells Alice what basis he measured each qubit in")
         print("Step 5: Alice tells Bob for which qubits he chose the correct basis")
         step4_5()
-        print(correct_basis_indeces)
+        #print(correct_basis_indeces)
         input("Press enter to proceed to Step 6...")
         
         print("Step 6: Alice and Bob delete all of their corresponding qubits for which the bases disagree")
         step6()
-        print("Alice: ", Alice['siftedBits'], Alice['siftedBases'])
-        print("Bob: ", Bob['siftedBits'], Bob['siftedBases'])
+        #print("Alice: ", Alice['siftedBits'], Alice['siftedBases'])
+        #print("Bob: ", Bob['siftedBits'], Bob['siftedBases'])
+        print("Length of sifted raw key: ", len(Alice['siftedBits']))
+        print("Percentage of reduction: ", (BITSIZE-len(Alice['siftedBits']))/BITSIZE*100,"%")
         input("Press enter to proceed to Step 7...")
         
         '''
