@@ -61,11 +61,15 @@ def step4_5():
 def step6():
     temp_bit_list = []
     temp_basis_list = []
+    num = 0
     for i in range(0, BITSIZE):
         if (i in correct_basis_indeces):
+            num += 1
+            print(num)
             temp_bit_list.append(Alice['generatedBits'][i])
             temp_basis_list.append(Alice['chosenBases'][i])
     
+    print("end for loop; begin list setting")
     Alice['siftedBits'] = temp_bit_list
     Bob['siftedBits'] = temp_bit_list
     Alice['siftedBases'] = temp_basis_list
