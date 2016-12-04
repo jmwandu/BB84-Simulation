@@ -7,9 +7,9 @@ Fall 2016 Mathematics Research Project
 from random import randint
 import os
 
-Alice = {'generatedBits':None, 'chosenBases':None}
-Bob = {'measuredBits':None, 'chosenBases':None}
-Eve = {'measuredBits':None, 'chosenBases':None}
+Alice = {'generatedBits':[], 'chosenBases':[]}
+Bob = {'measuredBits':[], 'chosenBases':[]}
+Eve = {'measuredBits':[], 'chosenBases':[]}
 BITSIZE = 10
 
 def step1():
@@ -28,6 +28,26 @@ def step1():
             
     Alice['generatedBits'] = temp_bit_list
     Alice['chosenBases'] = temp_basis_list
+    
+def step2_3():
+    temp_bit_list = []
+    temp_basis_list = []
+    for i in range(0, BITSIZE):
+        random_basis = randint(0,1)
+        if (random_basis == 0):
+            temp_basis = 'X'
+        elif (random_basis == 1):
+            temp_basis = 'Z'
+        
+        temp_basis_list.append(temp_basis)
+        
+        if (Alice['chosenBases'][i] == temp_basis):
+            temp_bit_list.append(Alice['generatedBits'][i])
+        else:
+            temp_bit_list.append(randint(0,1))
+            
+    Bob['measuredBits'] = temp_bit_list
+    Bob['chosenBases'] = temp_basis_list
 
 #where all the magic happens
 def main():
@@ -44,11 +64,13 @@ def main():
         print Alice
         raw_input("Press enter to proceed to Step 2...")
         
-        '''
         print "Step 2: Alice sends each qubit to Bob"
         print "Step 3: Bob randomly measures each qubit in either X or Z bases and records his results"
+        step2_3()
+        print Bob
         raw_input("Press enter to proceed to Step 4...")
         
+        '''
         print "Step 4: Bob publicly tells Alice what basis he measure each quit in"
         print "Step 5: Alice tells Bob for which qubits he chose the correct basis"
         raw_input("Press enter to proceed to Step 6...")
