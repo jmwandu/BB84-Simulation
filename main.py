@@ -4,6 +4,7 @@ BB-84 Protocol Simulator
 Fall 2016 Mathematics Research Project
 4 December, 2016
 """
+import sys
 from random import randint
 from multiprocessing import Pool
 
@@ -11,7 +12,7 @@ Alice = {'generatedBits':[], 'chosenBases':[], 'siftedBits':[], 'siftedBases':[]
 Bob = {'measuredBits':[], 'chosenBases':[], 'siftedBits':[], 'siftedBases':[]}
 Eve = {'measuredBits':[], 'chosenBases':[]}
 correct_basis_indeces = []
-BITSIZE = 100
+BITSIZE = 100000
 
 #step 1 of protocol
 def step1():
@@ -65,11 +66,11 @@ def step6_threading(received):
     lower = received[2]
     upper = received[3]
     
-    num = 0
+    #num = 0
     
     for i in range(lower, upper):
-        num += 1
-        print(num)
+        #num += 1
+        #print(num)
         if (i in correct_basis_indeces):
             bit_list.append(Alice['generatedBits'][i])
             basis_list.append(Alice['chosenBases'][i])
@@ -105,7 +106,7 @@ def step6():
     Bob['siftedBases'] = temp_basis_list
 
 #where all the magic happens
-def main():
+def detailedPresentation():
     print("Welcome!")
     print("This program will create a secure key using the BB84 Protocol.")
     input("Press enter to proceed to Step 1...")
@@ -113,16 +114,16 @@ def main():
     print("Step 1: Alice prepares a random string of bits and encodes them randomly in either the X or Z bases")
     step1()
     print("Alice's bits and bases:")
-    print(Alice['generatedBits'])
-    print(Alice['chosenBases'])
+    #print(Alice['generatedBits'])
+    #print(Alice['chosenBases'])
     input("Press enter to proceed to Step 2...")
     
     print("Step 2: Alice sends each qubit to Bob")
     print("Step 3: Bob randomly measures each qubit in either X or Z bases and records his results")
     step2_3()
     print("Bob's bits and bases:")
-    print(Bob['measuredBits'])
-    print(Bob['chosenBases'])
+    #print(Bob['measuredBits'])
+    #print(Bob['chosenBases'])
     input("Press enter to proceed to Step 4...")
     
     print("Step 4: Bob publicly tells Alice what basis he measured each qubit in")
@@ -135,11 +136,11 @@ def main():
     print("Step 6: Alice and Bob delete all of their corresponding qubits for which the bases disagree")
     step6()
     print("Alice's sifted key and bases:")
-    print(Alice['siftedBits'])
-    print(Alice['siftedBases'])
+    #print(Alice['siftedBits'])
+    #print(Alice['siftedBases'])
     print("Bob's sifted key and bases:")
-    print(Bob['siftedBits'])
-    print(Bob['siftedBases'])
+    #print(Bob['siftedBits'])
+    #print(Bob['siftedBases'])
     print("Length of sifted raw key: ", len(Alice['siftedBits']))
     print("Percentage of reduction: ", (BITSIZE-len(Alice['siftedBits']))/BITSIZE*100,"%")
     input("Press enter to proceed to Step 7...")
@@ -156,5 +157,31 @@ def main():
     input("Press enter to exit the program.")
     '''
 
+def quickPresentation():
+    print("some stuff")
+    
+def quickSimulation():
+    print("some stuff")
+
+
 if __name__ == "__main__":
-    main()
+    arg = sys.argv[0]
+    #if (arg == '0'):
+    done = False
+    
+    while (not done):
+        print("1: Run a detailed presentation (small bit size)")
+        print("2: Run a \"quick\" presentation (large bit size)")
+        print("3: Quit")
+        userInput = input("What would you like to do? ")
+        if (userInput == '1'):
+            detailedPresentation()
+        elif (userInput == '2'):
+            quickPresentation()
+        elif (userInput == '3'):
+            done = True
+            
+    print("Goodbye!")
+        
+    #elif (arg == '1'):
+        #quickSimulation()
