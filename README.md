@@ -9,4 +9,5 @@ If you want to run this program yourself, do the following in order:
 2.) Clone this repository to your local machine  
 3.) Navigate to your local git repository of through the command line  
 4.) To run the program, execute the following command:  
-        python3 main.py 0
+&emsp;&emsp;`python3 main.py 0`  
+5.) Follow the on-screen instructions to operate the program
