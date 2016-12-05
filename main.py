@@ -8,7 +8,6 @@ import sys
 from math import ceil
 from random import randint, random, sample
 from multiprocessing import Pool
-from scipy import spatial
 
 Alice = {'generatedBits':[], 'chosenBases':[], 'siftedBits':[], 'siftedBases':[]}
 Bob = {'measuredBits':[], 'chosenBases':[], 'siftedBits':[], 'siftedBases':[]}
@@ -137,10 +136,15 @@ def step7():
     random_sample_alice = [Alice['generatedBits'][i] for i in sorted(sample(range(len(Alice['generatedBits'])), reveal_size))]
     random_sample_bob = [Bob['measuredBits'][i] for i in sorted(sample(range(len(Bob['measuredBits'])), reveal_size))]
     
-    #this isn't what i want
-    error_rate = spatial.distance.cosine(random_sample_alice, random_sample_bob)
+    counter = 0
     
-    print("Error rate: ", error_rate)
+    for i in range(reveal_size):
+        if (random_sample_alice[i] == random_sample_bob[i]):
+            counter += 1
+            
+    error_rate = 100 * counter / reveal_size
+    
+    print("Error rate: ", error_rate, "%")
     
 #where all the magic happens
 def detailedPresentation():
