@@ -10,9 +10,9 @@ from multiprocessing import Pool
 
 Alice = {'generatedBits':[], 'chosenBases':[], 'siftedBits':[], 'siftedBases':[]}
 Bob = {'measuredBits':[], 'chosenBases':[], 'siftedBits':[], 'siftedBases':[]}
-Eve = {'measuredBits':[], 'chosenBases':[]}
+Eve = {'measuredBits':[], 'chosenBases':[], 'siftedBits'}:[], 'siftedBases':[]}
 correct_basis_indeces = []
-BITSIZE = 100000
+BITSIZE = 100
 
 #step 1 of protocol
 def step1():
@@ -66,11 +66,11 @@ def step6_threading(received):
     lower = received[2]
     upper = received[3]
     
-    #num = 0
+    num = 0
     
     for i in range(lower, upper):
-        #num += 1
-        #print(num)
+        num += 1
+        print(num)
         if (i in correct_basis_indeces):
             bit_list.append(Alice['generatedBits'][i])
             basis_list.append(Alice['chosenBases'][i])
@@ -165,23 +165,24 @@ def quickSimulation():
 
 
 if __name__ == "__main__":
-    arg = sys.argv[0]
-    #if (arg == '0'):
-    done = False
+    arg = sys.argv
     
-    while (not done):
-        print("1: Run a detailed presentation (small bit size)")
-        print("2: Run a \"quick\" presentation (large bit size)")
-        print("3: Quit")
-        userInput = input("What would you like to do? ")
-        if (userInput == '1'):
-            detailedPresentation()
-        elif (userInput == '2'):
-            quickPresentation()
-        elif (userInput == '3'):
-            done = True
-            
-    print("Goodbye!")
+    if (arg[1] == '0'):
+        done = False
         
-    #elif (arg == '1'):
-        #quickSimulation()
+        while (not done):
+            print("1: Run a detailed presentation (small bit size)")
+            print("2: Run a \"quick\" presentation (large bit size)")
+            print("3: Quit")
+            userInput = input("What would you like to do? ")
+            if (userInput == '1'):
+                detailedPresentation()
+            elif (userInput == '2'):
+                quickPresentation()
+            elif (userInput == '3'):
+                done = True
+                
+        print("Goodbye!")
+        
+    elif (arg[1] == '1'):
+        quickSimulation(arg[2])
