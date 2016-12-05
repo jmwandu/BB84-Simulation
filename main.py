@@ -12,10 +12,17 @@ from multiprocessing import Pool
 Alice = {'generatedBits':[], 'chosenBases':[], 'siftedBits':[], 'siftedBases':[]}
 Bob = {'measuredBits':[], 'chosenBases':[], 'siftedBits':[], 'siftedBases':[]}
 Eve = {'measuredBits':[], 'chosenBases':[], 'siftedBits':[], 'siftedBases':[]}
-correct_basis_indeces = []
+correct_basis_indices = []
 BITSIZE = 0
 qber_calculated = 0
 qber_actual = 0
+
+#reset all data back to blank to prevent memory overflow
+def clear_data():
+    Alice = {'generatedBits':[], 'chosenBases':[], 'siftedBits':[], 'siftedBases':[]}
+    Bob = {'measuredBits':[], 'chosenBases':[], 'siftedBits':[], 'siftedBases':[]}
+    Eve = {'measuredBits':[], 'chosenBases':[], 'siftedBits':[], 'siftedBases':[]}
+    correct_basis_indices = []
 
 #step 1 of protocol
 def step1():
@@ -81,7 +88,7 @@ def step2_3():
 def step4_5():
     for i in range(0, BITSIZE):
         if (Alice['chosenBases'][i] == Bob['chosenBases'][i]):
-            correct_basis_indeces.append(i)
+            correct_basis_indices.append(i)
 
 #threading for step 6 of the protocol
 def step6_threading(received):
@@ -96,7 +103,7 @@ def step6_threading(received):
     basis_list_eve = []
     
     for i in range(lower, upper):
-        if (i in correct_basis_indeces):
+        if (i in correct_basis_indices):
             bit_list_alice.append(Alice['generatedBits'][i])
             basis_list_alice.append(Alice['chosenBases'][i])
             bit_list_bob.append(Bob['measuredBits'][i])
@@ -133,18 +140,22 @@ def step6():
     
 #step 7 of protocol
 def step7():
-    reveal_size = ceil(len(correct_basis_indeces)/2)
+    reveal_size = ceil(len(correct_basis_indices)/2)
     
-    random_sample_alice = [Alice['generatedBits'][i] for i in sorted(sample(range(len(Alice['generatedBits'])), reveal_size))]
-    random_sample_bob = [Bob['measuredBits'][i] for i in sorted(sample(range(len(Bob['measuredBits'])), reveal_size))]
+    #list of random, sorted indices from Alice's generatedBits list
+    #number of indices in list is reveal_size
+    random_indicies = sorted(sample(range(len(Alice['siftedBits'])), reveal_size))
     
-    counter = 0
+    random_sample_alice = [Alice['siftedBits'][i] for i in random_indicies]
+    random_sample_bob = [Bob['siftedBits'][i] for i in random_indicies]
+    
+    incorrect = 0
     
     for i in range(reveal_size):
-        if (random_sample_alice[i] == random_sample_bob[i]):
-            counter += 1
+        if (random_sample_alice[i] != random_sample_bob[i]):
+            incorrect += 1
             
-    error_rate = 100 * counter / reveal_size
+    error_rate = 100 * incorrect / reveal_size
     
     print("Error rate: ", error_rate, "%")
     
@@ -180,8 +191,8 @@ def detailedPresentation(bit_size):
     print("Step 4: Bob publicly tells Alice what basis he measured each qubit in")
     print("Step 5: Alice tells Bob for which qubits he chose the correct basis")
     step4_5()
-    print("Indeces of bits/bases that Alice and Bob have in common:")
-    print(correct_basis_indeces)
+    print("indices of bits/bases that Alice and Bob have in common:")
+    print(correct_basis_indices)
     input("Press enter to proceed to Step 6...\n")
     
     print("Step 6: Alice and Bob delete all of their corresponding qubits for which the bases disagree (and Eve tries to)")
@@ -238,8 +249,8 @@ if __name__ == "__main__":
         done = False
         
         while (not done):
-            print("1: Run a detailed presentation (small bit size)")
-            print("2: Run a \"quick\" presentation (large bit size)")
+            print("1: Run a detailed presentation")
+            print("2: Run a quick presentation")
             print("3: Quit")
             userInput = input("What would you like to do? ")
             if (userInput == '1'):
@@ -250,6 +261,8 @@ if __name__ == "__main__":
                 quickPresentation(int(userInput))
             elif (userInput == '3'):
                 done = True
+                
+            clear_data()
                 
         print("Goodbye!")
         
