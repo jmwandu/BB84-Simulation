@@ -9,8 +9,8 @@ from math import ceil
 from random import randint, random, sample
 from multiprocessing import Pool
 
-Alice = {'generatedBits':[], 'chosenBases':[], 'siftedBits':[], 'siftedBases':[]}
-Bob = {'measuredBits':[], 'chosenBases':[], 'siftedBits':[], 'siftedBases':[]}
+Alice = {'generatedBits':[], 'chosenBases':[], 'siftedBits':[], 'siftedBases':[], 'finalKey':[]}
+Bob = {'measuredBits':[], 'chosenBases':[], 'siftedBits':[], 'siftedBases':[], 'finalKey':[]}
 Eve = {'measuredBits':[], 'chosenBases':[], 'siftedBits':[], 'siftedBases':[]}
 correct_basis_indices = []
 BITSIZE = 0
@@ -19,8 +19,8 @@ qber_actual = 0
 
 #reset all data back to blank to prevent memory overflow
 def clear_data():
-    Alice = {'generatedBits':[], 'chosenBases':[], 'siftedBits':[], 'siftedBases':[]}
-    Bob = {'measuredBits':[], 'chosenBases':[], 'siftedBits':[], 'siftedBases':[]}
+    Alice = {'generatedBits':[], 'chosenBases':[], 'siftedBits':[], 'siftedBases':[], 'finalKey':[]}
+    Bob = {'measuredBits':[], 'chosenBases':[], 'siftedBits':[], 'siftedBases':[], 'finalKey':[]}
     Eve = {'measuredBits':[], 'chosenBases':[], 'siftedBits':[], 'siftedBases':[]}
     correct_basis_indices = []
 
@@ -140,6 +140,7 @@ def step6():
     
 #step 7 of protocol
 def step7():
+    #calculate qber_calculated
     reveal_size = ceil(len(correct_basis_indices)/2)
     
     #list of random, sorted indices from Alice's generatedBits list
@@ -154,12 +155,33 @@ def step7():
     for i in range(reveal_size):
         if (random_sample_alice[i] != random_sample_bob[i]):
             incorrect += 1
-            
-    error_rate = 100 * incorrect / reveal_size
     
-    print("Error rate: ", error_rate, "%")
+    global qber_calculated
+    qber_calculated = 100 * incorrect / reveal_size
     
-#where all the magic happens
+    #calculate qber_actual
+    final_bits_alice = []
+    final_bits_bob = []
+    
+    for i in range(len(Alice['siftedBits'])):
+        if (i not in random_indicies):
+            final_bits_alice.append(Alice['siftedBits'][i])
+            final_bits_bob.append(Bob['siftedBits'][i])
+    
+    Alice['finalKey'] = final_bits_alice
+    Bob['finalKey'] = final_bits_bob
+    
+    incorrect = 0
+    
+    for i in range(len(final_bits_alice)):
+        if (final_bits_alice[i] != final_bits_bob[i]):
+            incorrect += 1
+    
+    global qber_actual
+    qber_actual = 100 * incorrect / len(final_bits_alice)
+    
+#presentation to show off the process of the simulation
+#goes through each step
 def detailedPresentation(bit_size):
     global BITSIZE
     BITSIZE = bit_size
@@ -213,7 +235,9 @@ def detailedPresentation(bit_size):
     print("Step 7: Alice and Bob agree on a small subset of the sifted raw key to publicly reveal")
     print("Note: This is to calculate the quantum bit error rate.")
     step7()
-    input("Press enter to proceed to Step 8...\n")
+    print("The calculated QBER is: " + str(qber_calculated) + "%")
+    print("The actual QBER is: " + str(qber_actual) + "%")
+    input("Press enter to finish this presentation...\n")
     
     '''
     print("Step 8: Alice and Bob perform error reconciliation")
@@ -223,6 +247,8 @@ def detailedPresentation(bit_size):
     input("Press enter to exit the program.")
     '''
 
+#presentaion to show off the speed of the simulation on large bit sizes
+#only spits out final QBERs
 def quickPresentation(bit_size):
     global BITSIZE
     BITSIZE = bit_size
@@ -231,7 +257,10 @@ def quickPresentation(bit_size):
     step4_5()
     step6()
     step7()
-    
+    print("The calculated QBER is: " + str(qber_calculated) + "%")
+    print("The actual QBER is: " + str(qber_actual) + "%")
+
+#quick simulation used to 
 def quickSimulation(bit_size):
     global BITSIZE
     BITSIZE = bit_size
@@ -267,4 +296,4 @@ if __name__ == "__main__":
         print("Goodbye!")
         
     elif (arg[1] == '1'):
-        quickSimulation(arg[2])
+        quickSimulation(int(arg[2]))
