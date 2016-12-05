@@ -13,12 +13,12 @@ Alice = {'generatedBits':[], 'chosenBases':[], 'siftedBits':[], 'siftedBases':[]
 Bob = {'measuredBits':[], 'chosenBases':[], 'siftedBits':[], 'siftedBases':[]}
 Eve = {'measuredBits':[], 'chosenBases':[], 'siftedBits':[], 'siftedBases':[]}
 correct_basis_indeces = []
-#BITSIZE = 10
+BITSIZE = 0
 qber_calculated = 0
 qber_actual = 0
 
 #step 1 of protocol
-def step1(BITSIZE):
+def step1():
     temp_bit_list = []
     temp_basis_list = []
     for i in range(0, BITSIZE):
@@ -36,7 +36,7 @@ def step1(BITSIZE):
     Alice['chosenBases'] = temp_basis_list
 
 #step 2 and 3 of protocol
-def step2_3(BITSIZE):
+def step2_3():
     #go from Alice to Eve
     temp_bit_list_Eve = []
     temp_basis_list_Eve = []
@@ -78,7 +78,7 @@ def step2_3(BITSIZE):
     Bob['chosenBases'] = temp_basis_list_Bob
     
 #step 4 and 5 of protocol
-def step4_5(BITSIZE):
+def step4_5():
     for i in range(0, BITSIZE):
         if (Alice['chosenBases'][i] == Bob['chosenBases'][i]):
             correct_basis_indeces.append(i)
@@ -107,7 +107,7 @@ def step6_threading(received):
     return (bit_list_alice, basis_list_alice, bit_list_bob, basis_list_bob, bit_list_eve, basis_list_eve)
 
 #step 6 of the protocol        
-def step6(BITSIZE):
+def step6():
     input = [(0, int(BITSIZE/4)), 
             (int(BITSIZE/4), int(2*BITSIZE/4)), 
             (int(2*BITSIZE/4), int(3*BITSIZE/4)), 
@@ -150,6 +150,7 @@ def step7():
     
 #where all the magic happens
 def detailedPresentation(bit_size):
+    global BITSIZE
     BITSIZE = bit_size
     
     print(BITSIZE)
@@ -159,7 +160,7 @@ def detailedPresentation(bit_size):
     input("Press enter to proceed to Step 1...\n")
     
     print("Step 1: Alice prepares a random string of bits and encodes them randomly in either the X or Z bases")
-    step1(BITSIZE)
+    step1()
     print("Alice's bits and bases:")
     print(Alice['generatedBits'])
     print(Alice['chosenBases'])
@@ -167,7 +168,7 @@ def detailedPresentation(bit_size):
     
     print("Step 2: Alice sends each qubit to Bob (intercepted and then resent by Eve)")
     print("Step 3: Bob randomly measures each qubit in either X or Z bases and records his results")
-    step2_3(BITSIZE)
+    step2_3()
     print("Eve's bits and bases:")
     print(Eve['measuredBits'])
     print(Eve['chosenBases'], "\n")
@@ -178,13 +179,13 @@ def detailedPresentation(bit_size):
     
     print("Step 4: Bob publicly tells Alice what basis he measured each qubit in")
     print("Step 5: Alice tells Bob for which qubits he chose the correct basis")
-    step4_5(BITSIZE)
+    step4_5()
     print("Indeces of bits/bases that Alice and Bob have in common:")
     print(correct_basis_indeces)
     input("Press enter to proceed to Step 6...\n")
     
     print("Step 6: Alice and Bob delete all of their corresponding qubits for which the bases disagree (and Eve tries to)")
-    step6(BITSIZE)
+    step6()
     print("Alice's sifted key and bases:")
     print(Alice['siftedBits'])
     print(Alice['siftedBases'], "\n")
@@ -212,19 +213,21 @@ def detailedPresentation(bit_size):
     '''
 
 def quickPresentation(bit_size):
+    global BITSIZE
     BITSIZE = bit_size
-    step1(BITSIZE)
-    step2_3(BITSIZE)
-    step4_5(BITSIZE)
-    step6(BITSIZE)
+    step1()
+    step2_3()
+    step4_5()
+    step6()
     step7()
     
 def quickSimulation(bit_size):
+    global BITSIZE
     BITSIZE = bit_size
-    step1(BITSIZE)
-    step2_3(BITSIZE)
-    step4_5(BITSIZE)
-    step6(BITSIZE)
+    step1()
+    step2_3()
+    step4_5()
+    step6()
     step7()
 
 
