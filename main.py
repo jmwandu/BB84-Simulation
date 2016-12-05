@@ -13,7 +13,7 @@ Alice = {'generatedBits':[], 'chosenBases':[], 'siftedBits':[], 'siftedBases':[]
 Bob = {'measuredBits':[], 'chosenBases':[], 'siftedBits':[], 'siftedBases':[]}
 Eve = {'measuredBits':[], 'chosenBases':[], 'siftedBits':[], 'siftedBases':[]}
 correct_basis_indeces = []
-BITSIZE = 1000
+BITSIZE = 0
 
 #step 1 of protocol
 def step1():
@@ -147,8 +147,8 @@ def step7():
     print("Error rate: ", error_rate, "%")
     
 #where all the magic happens
-def detailedPresentation():
-    #BITSIZE = bit_size
+def detailedPresentation(bit_size):
+    BITSIZE = bit_size
     
     print("Welcome!")
     print("This program will create a secure key using the BB84 Protocol.")
@@ -233,7 +233,7 @@ if __name__ == "__main__":
             userInput = input("What would you like to do? ")
             if (userInput == '1'):
                 userInput =  input("What would you like the bit size to be? (Recommended: small)\n")
-                detailedPresentation()
+                detailedPresentation(int(userInput))
             elif (userInput == '2'):
                 userInput =  input("What would you like the bit size to be? (Recommended: large)\n")
                 quickPresentation(int(userInput))
