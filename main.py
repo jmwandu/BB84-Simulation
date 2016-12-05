@@ -134,12 +134,13 @@ def step6():
 def step7():
     reveal_size = ceil(len(correct_basis_indeces)/2)
     
-    random_sample_alice = [Alice['generatedBits'][i] for i in sorted(random.sample(range(len(Alice['generatedBits'])), reveal_size))]
-    random_sample_bob = [Bob['measuredBits'][i] for i in sorted(random.sample(range(len(Bob['measuredBits'])), reveal_size))]
+    random_sample_alice = [Alice['generatedBits'][i] for i in sorted(sample(range(len(Alice['generatedBits'])), reveal_size))]
+    random_sample_bob = [Bob['measuredBits'][i] for i in sorted(sample(range(len(Bob['measuredBits'])), reveal_size))]
     
+    #this isn't what i want
     error_rate = spatial.distance.cosine(random_sample_alice, random_sample_bob)
     
-    print(error_rate)
+    print("Error rate: ", error_rate)
     
 #where all the magic happens
 def detailedPresentation():
