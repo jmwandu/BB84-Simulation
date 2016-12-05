@@ -6,14 +6,15 @@ Fall 2016 Mathematics Research Project
 """
 import sys
 from math import ceil
-from random import randint
+from random import randint, random, sample
 from multiprocessing import Pool
+from scipy import spatial
 
 Alice = {'generatedBits':[], 'chosenBases':[], 'siftedBits':[], 'siftedBases':[]}
 Bob = {'measuredBits':[], 'chosenBases':[], 'siftedBits':[], 'siftedBases':[]}
 Eve = {'measuredBits':[], 'chosenBases':[], 'siftedBits':[], 'siftedBases':[]}
 correct_basis_indeces = []
-BITSIZE = 100
+BITSIZE = 1000
 
 #step 1 of protocol
 def step1():
@@ -128,9 +129,22 @@ def step6():
     Alice['siftedBases'] = temp_basis_list_alice
     Bob['siftedBases'] = temp_basis_list_bob
     Eve['siftedBases'] = temp_basis_list_eve
-
+    
+#step 7 of protocol
+def step7():
+    reveal_size = ceil(len(correct_basis_indeces)/2)
+    
+    random_sample_alice = [Alice['generatedBits'][i] for i in sorted(random.sample(range(len(Alice['generatedBits'])), reveal_size))]
+    random_sample_bob = [Bob['measuredBits'][i] for i in sorted(random.sample(range(len(Bob['measuredBits'])), reveal_size))]
+    
+    error_rate = spatial.distance.cosine(random_sample_alice, random_sample_bob)
+    
+    print(error_rate)
+    
 #where all the magic happens
 def detailedPresentation():
+    #BITSIZE = bit_size
+    
     print("Welcome!")
     print("This program will create a secure key using the BB84 Protocol.")
     input("Press enter to proceed to Step 1...\n")
@@ -175,11 +189,12 @@ def detailedPresentation():
     print("Percentage of reduction: ", (BITSIZE-len(Alice['siftedBits']))/BITSIZE*100,"%")
     input("Press enter to proceed to Step 7...\n")
     
-    '''
     print("Step 7: Alice and Bob agree on a small subset of the sifted raw key to publicly reveal")
     print("Note: This is to calculate the quantum bit error rate.")
+    step7()
     input("Press enter to proceed to Step 8...\n")
     
+    '''
     print("Step 8: Alice and Bob perform error reconciliation")
     input("Press enter to proceed to Step 9...\n")
     
@@ -187,9 +202,13 @@ def detailedPresentation():
     input("Press enter to exit the program.")
     '''
 
-def quickPresentation():
-    BITSIZE = 100000
-    print("some stuff")
+def quickPresentation(bit_size):
+    BITSIZE = bit_size
+    step1()
+    step2_3()
+    step4_5()
+    step6()
+    step7()
     
 def quickSimulation(bit_size):
     BITSIZE = bit_size
@@ -208,9 +227,11 @@ if __name__ == "__main__":
             print("3: Quit")
             userInput = input("What would you like to do? ")
             if (userInput == '1'):
+                userInput =  input("What would you like the bit size to be? (Recommended: small)\n")
                 detailedPresentation()
             elif (userInput == '2'):
-                quickPresentation()
+                userInput =  input("What would you like the bit size to be? (Recommended: large)\n")
+                quickPresentation(int(userInput))
             elif (userInput == '3'):
                 done = True
                 
