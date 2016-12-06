@@ -183,15 +183,13 @@ def step7():
 #formula for secure key rate
 #takes decimal from 0 to 1, returns the secure key rate as a decimal from 0 to 1
 def secureKeyRate(x):
-    return 1-2*(-x*log(x, 2) - (1-x)*log(1-x, 2))
+    return ((-x)*log(x, 2) - (1-x)*log(1-x, 2))
     
 #presentation to show off the process of the simulation
 #goes through each step
 def detailedPresentation(bit_size):
     global BITSIZE
     BITSIZE = bit_size
-    
-    print(BITSIZE)
     
     print("Welcome!")
     print("This program will create a secure key using the BB84 Protocol.")
@@ -218,7 +216,7 @@ def detailedPresentation(bit_size):
     print("Step 4: Bob publicly tells Alice what basis he measured each qubit in")
     print("Step 5: Alice tells Bob for which qubits he chose the correct basis")
     step4_5()
-    print("indices of bits/bases that Alice and Bob have in common:")
+    print("Indices of bits/bases in which Alice and Bob have the same basis:")
     print(correct_basis_indices)
     input("Press enter to proceed to Step 6...\n")
     
@@ -242,6 +240,8 @@ def detailedPresentation(bit_size):
     step7()
     print("The calculated QBER is: " + str(100*qber_calculated) + "%")
     print("The actual QBER is: " + str(100*qber_actual) + "%")
+    print("The calculated secure key rate is: " + str(100*secureKeyRate(qber_calculated)) + "%")
+    print("The actual secure key rate is: " + str(100*secureKeyRate(qber_actual)) + "%")
     input("Press enter to finish this presentation...\n")
     
     '''
@@ -264,6 +264,8 @@ def quickPresentation(bit_size):
     step7()
     print("The calculated QBER is: " + str(100*qber_calculated) + "%")
     print("The actual QBER is: " + str(100*qber_actual) + "%")
+    print("The calculated secure key rate is: " + str(100*secureKeyRate(qber_calculated)) + "%")
+    print("The actual secure key rate is: " + str(100*secureKeyRate(qber_actual)) + "%")
     print("Length of final key: ", len(Alice['finalKey']))
     print("Percentage of reduction: " + str((BITSIZE-len(Alice['finalKey']))/BITSIZE*100) + "%")
 
@@ -284,7 +286,7 @@ def quickSimulation(bit_size):
     
     return (raw_sifted_key_length, final_key_length, calculated_secure_key_rate, actual_secure_key_rate)
 
-
+#begin the program
 if __name__ == "__main__":
     arg = sys.argv
     
