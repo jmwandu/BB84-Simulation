@@ -5,7 +5,7 @@ Fall 2016 Mathematics Research Project
 4 December, 2016
 """
 import sys
-from math import ceil
+from math import ceil, log, sqrt
 from random import randint, random, sample
 from multiprocessing import Pool
 
@@ -141,7 +141,7 @@ def step6():
 #step 7 of protocol
 def step7():
     #calculate qber_calculated
-    reveal_size = ceil(len(correct_basis_indices)/2)
+    reveal_size = ceil(sqrt(len(correct_basis_indices)))
     
     #list of random, sorted indices from Alice's generatedBits list
     #number of indices in list is reveal_size
@@ -157,7 +157,7 @@ def step7():
             incorrect += 1
     
     global qber_calculated
-    qber_calculated = 100 * incorrect / reveal_size
+    qber_calculated = incorrect / reveal_size
     
     #calculate qber_actual
     final_bits_alice = []
@@ -178,7 +178,12 @@ def step7():
             incorrect += 1
     
     global qber_actual
-    qber_actual = 100 * incorrect / len(final_bits_alice)
+    qber_actual = incorrect / len(final_bits_alice)
+
+#formula for secure key rate
+#takes decimal from 0 to 1, returns the secure key rate as a decimal from 0 to 1
+def secureKeyRate(x):
+    return 1-2*(-x*log(x, 2) - (1-x)*log(1-x, 2))
     
 #presentation to show off the process of the simulation
 #goes through each step
@@ -235,8 +240,8 @@ def detailedPresentation(bit_size):
     print("Step 7: Alice and Bob agree on a small subset of the sifted raw key to publicly reveal")
     print("Note: This is to calculate the quantum bit error rate.")
     step7()
-    print("The calculated QBER is: " + str(qber_calculated) + "%")
-    print("The actual QBER is: " + str(qber_actual) + "%")
+    print("The calculated QBER is: " + str(100*qber_calculated) + "%")
+    print("The actual QBER is: " + str(100*qber_actual) + "%")
     input("Press enter to finish this presentation...\n")
     
     '''
@@ -257,8 +262,10 @@ def quickPresentation(bit_size):
     step4_5()
     step6()
     step7()
-    print("The calculated QBER is: " + str(qber_calculated) + "%")
-    print("The actual QBER is: " + str(qber_actual) + "%")
+    print("The calculated QBER is: " + str(100*qber_calculated) + "%")
+    print("The actual QBER is: " + str(100*qber_actual) + "%")
+    print("Length of final key: ", len(Alice['finalKey']))
+    print("Percentage of reduction: " + str((BITSIZE-len(Alice['finalKey']))/BITSIZE*100) + "%")
 
 #quick simulation used to 
 def quickSimulation(bit_size):
@@ -269,6 +276,13 @@ def quickSimulation(bit_size):
     step4_5()
     step6()
     step7()
+    
+    raw_sifted_key_length = len(Alice['siftedBits'])
+    final_key_length = len(Alice['finalKey'])
+    calculated_secure_key_rate = secureKeyRate(qber_calculated)
+    actual_secure_key_rate = secureKeyRate(qber_actual)
+    
+    return (raw_sifted_key_length, final_key_length, calculated_secure_key_rate, actual_secure_key_rate)
 
 
 if __name__ == "__main__":
