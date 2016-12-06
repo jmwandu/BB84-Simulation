@@ -235,8 +235,7 @@ def detailedPresentation(bit_size):
     print("Percentage of reduction: ", (BITSIZE-len(Alice['siftedBits']))/BITSIZE*100,"%")
     input("Press enter to proceed to Step 7...\n")
     
-    print("Step 7: Alice and Bob agree on a small subset of the sifted raw key to publicly reveal")
-    print("Note: This is to calculate the quantum bit error rate.")
+    print("Step 7: Alice and Bob agree on a small subset of the sifted raw key to publicly reveal in order to calculate the quantum bit error rate.")
     step7()
     print("The calculated QBER is: " + str(100*qber_calculated) + "%")
     print("The actual QBER is: " + str(100*qber_actual) + "%")
