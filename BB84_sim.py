@@ -47,48 +47,51 @@ def Display_graph(data):
 	while True:
 
 		print("Please enter the kind of plot you would like: \n"
-			"0) Raw Sifted Key vs Final key length\n"
-			"1) Bit size vs Raw Sifted Key\n"
-			"2) Bit size vs Final key length\n"
+			"0) Raw Sifted Key vs Final Key Length\n"
+			"1) Bit Size vs Raw Sifted Key\n"
+			"2) Bit Size vs Final Key Length\n"
 			"3) Calculated QBER vs Actual QBER\n"
-			"4) Bit size vs Acutal QBER \n"
-			"5) Bit size vs Calculated QBER\n"
-			"6) Final key length vs Actual QBER \n"
-			"7) Final key length vs Calculated QBER\n"
-			"8) stop graphing\n")
+			"4) Bit Size vs Acutal QBER \n"
+			"5) Bit Size vs Calculated QBER\n"
+			"6) Final Key Length vs Actual QBER \n"
+			"7) Final Key Length vs Calculated QBER\n"
+			"8) QBER Calculated vs QBER Actual\n"
+			"9) Bit Size vs QBER Size\n"
+			"10) Bit Size vs QBER Calculated\n"
+			"11) stop graphing\n")
 		choice = eval(input("Choice: "))
 		
 		if choice == 0:
 			graph( "Raw Sifted Key",  "Final key length", construct_axis(data,0), construct_axis(data,1))
 		elif choice == 1: 
-			graph( "Bit size", "Raw Sifted Key", construct_axis(data,0, True), construct_axis(data,0))
+			graph( "Bit Size", "Raw Sifted Key", construct_axis(data,0, True), construct_axis(data,0))
 			
 		elif choice == 2: 
-			graph( "Bit size", "Final key length", construct_axis(data,0, True), construct_axis(data,1))
+			graph( "Bit Size", "Final Key Length", construct_axis(data,0, True), construct_axis(data,1))
 			
 		elif choice == 3:
-			graph( "Calculated secure key rate", "Actual secure key rate", construct_axis(data,2), construct_axis(data,3))
+			graph( "Calculated Secure Key Rate", "Actual Secure Key Rate", construct_axis(data,2), construct_axis(data,3))
 			
 		elif choice == 4:
-			graph( "Bit size", "Acutal secure key rate", construct_axis(data,0, True), construct_axis(data,3))
+			graph( "Bit Size", "Acutal Secure Key Rate", construct_axis(data,0, True), construct_axis(data,3))
 			
 		elif choice == 5: 
-			graph( "Bit size","Calculated secure key rate", construct_axis(data,0, True), construct_axis(data,2))
+			graph( "Bit Size","Calculated Secure Key Rate", construct_axis(data,0, True), construct_axis(data,2))
 			
 		elif choice == 6:
-			graph( "Final key length", "Actual secure key rate",  construct_axis(data,1), construct_axis(data,3) )
+			graph( "Final Key Length", "Actual Secure Key Rate",  construct_axis(data,1), construct_axis(data,3) )
 			
 		elif choice == 7:
-			graph( "Final key length", "Calculated secure key rate", construct_axis(data,1), construct_axis(data,2))
+			graph( "Final Key Length", "Calculated Secure Key Rate", construct_axis(data,1), construct_axis(data,2))
 			
 		elif choice == 8:
 			graph("QBER Calculated", "QBER Actual", construct_axis(data,4), construct_axis(data,5))
 
 		elif choice == 9:
-			graph("Bit size", "QBER size", construct_axis(data,0, True), construct_axis(data,5))
+			graph("Bit Size", "QBER Size", construct_axis(data,0, True), construct_axis(data,5))
 			
 		elif choice == 10:
-			graph("Bit size", "QBER Calculated", construct_axis(data,0, True), construct_axis(data,4))
+			graph("Bit Size", "QBER Calculated", construct_axis(data,0, True), construct_axis(data,4))
 
 		elif choice == 11:
 			break
@@ -109,4 +112,4 @@ def main():
 		Display_graph(data)
 	elif choice == 3:
 		exit()
-main()
+main())
